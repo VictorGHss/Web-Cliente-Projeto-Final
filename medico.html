@@ -6,7 +6,7 @@
   <title>Painel do Médico | Inovare</title>
   <link rel="stylesheet" href="css/style.css">
   <script type="module">
-    // Proteção de rota imediata no head para evitar FOUC
+    // Proteção de rota imediata no head em escopo isolado para evitar erros de re-declaração
     {
       const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
       if (!usuario || usuario.perfil !== 'medico') {
@@ -17,43 +17,65 @@
 </head>
 <body>
 
-  <header class="main-header">
-    <div class="header-container">
-      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px;">
+  <!-- Cabeçalho com Logo, Nome do Médico/Especialidade e Logout -->
+  <header class="main-header" role="banner">
+    <div class="header-container" style="display: flex; align-items: center; justify-content: space-between;">
+      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px; margin: 0;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="user-badge" id="doctor-info">Carregando...</span>
+        <button id="btn-logout" class="btn-logout">Sair</button>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <div class="dashboard-container">
-      <div class="dashboard-header">
-        <h2>Olá, <span id="user-name">Dr(a)</span>!</h2>
-        <button id="btn-logout" class="btn-logout">Sair</button>
+  <!-- Conteúdo Principal -->
+  <main class="container" id="main-content">
+    
+    <section class="appointments-section" aria-labelledby="appointments-title">
+      <h2 id="appointments-title">Agenda de Atendimentos</h2>
+      
+      <!-- Container Responsivo da Tabela -->
+      <div id="table-wrapper" class="table-responsive" style="display: none;">
+        <table class="appointments-table" id="appointments-table">
+          <thead>
+            <tr>
+              <th scope="col">Paciente</th>
+              <th scope="col">Data</th>
+              <th scope="col">Horário</th>
+              <th scope="col">Status Atual</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="appointments-tbody">
+            <!-- Linhas de consultas geradas dinamicamente via JS -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5" id="appointments-total" style="text-align: right;">
+                Total de atendimentos: 0
+              </td>
+            </tr>
+          </tfoot>
+        </table>
       </div>
 
-      <div class="card">
-        <h3>Dados de Identificação</h3>
-        <p><strong>Nome:</strong> <span id="display-name">Carregando...</span></p>
-        <p><strong>E-mail:</strong> <span id="display-email">Carregando...</span></p>
-        <p><strong>Especialidade:</strong> <span id="display-specialty">Carregando...</span></p>
-      </div>
-    </div>
+      <!-- Mensagem amigável alternativa caso não haja consultas -->
+      <p id="empty-appointments" class="empty-message" style="display: none;">
+        Você não possui consultas agendadas no momento.
+      </p>
+
+    </section>
+
   </main>
 
-  <script type="module">
-    // Carregar dados dinâmicos do usuário
-    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-    if (usuario) {
-      document.getElementById('user-name').textContent = usuario.nome;
-      document.getElementById('display-name').textContent = usuario.nome;
-      document.getElementById('display-email').textContent = usuario.email;
-      document.getElementById('display-specialty').textContent = usuario.especialidade || 'N/A';
-    }
+  <!-- Rodapé Padronizado -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="container">
+      <p>R. Carlos Osternack, 111 - Estrela, Ponta Grossa - PR, 84040-120 | Telefone: (42) 3026-2600</p>
+    </div>
+  </footer>
 
-    // Funcionalidade de Logout
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      sessionStorage.removeItem('usuarioLogado');
-      window.location.href = 'index.html';
-    });
-  </script>
+  <!-- Script Principal do Painel do Médico -->
+  <script type="module" src="js/medico.js"></script>
 </body>
 </html>
