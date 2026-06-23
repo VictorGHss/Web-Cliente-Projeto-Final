@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Administrador | Inovare</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link class="style" rel="stylesheet" href="css/style.css">
   <script type="module">
-    // Proteção de rota imediata no head para evitar FOUC
+    // Proteção de rota imediata no head em escopo isolado para evitar erros de re-declaração
     {
       const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
       if (!usuario || usuario.perfil !== 'admin') {
@@ -17,41 +17,112 @@
 </head>
 <body>
 
-  <header class="main-header">
-    <div class="header-container">
-      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px;">
+  <!-- Cabeçalho Administrativo -->
+  <header class="main-header" role="banner">
+    <div class="header-container" style="display: flex; align-items: center; justify-content: space-between;">
+      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px; margin: 0;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="user-badge" id="admin-display-name">Carregando...</span>
+        <button id="btn-logout" class="btn-logout">Sair</button>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <div class="dashboard-container">
-      <div class="dashboard-header">
-        <h2>Olá, <span id="user-name">Administrador</span>!</h2>
-        <button id="btn-logout" class="btn-logout">Sair</button>
-      </div>
+  <!-- Conteúdo Principal -->
+  <main class="container" id="main-content">
+    
+    <!-- Seção de Cadastro / Edição de Médicos -->
+    <section class="login-section" aria-labelledby="form-section-title">
+      <div class="form-wrapper">
+        <div class="form-title">
+          <h2 id="form-section-title">Cadastrar Novo Médico</h2>
+          <p id="form-section-desc">Insira as informações do profissional para autorizar acesso ao sistema</p>
+        </div>
 
-      <div class="card">
-        <h3>Painel Administrativo Geral</h3>
-        <p><strong>Nome:</strong> <span id="display-name">Carregando...</span></p>
-        <p><strong>E-mail:</strong> <span id="display-email">Carregando...</span></p>
+        <form id="doctor-form" novalidate>
+          <fieldset>
+            <legend id="form-legend">Dados Profissionais</legend>
+
+            <!-- Campo Nome Completo -->
+            <div class="form-group">
+              <label for="doctor-name">Nome Completo</label>
+              <input 
+                type="text" 
+                id="doctor-name" 
+                name="doctor-name" 
+                placeholder="Ex: Dr. José da Silva" 
+                required 
+                aria-required="true"
+              >
+            </div>
+
+            <!-- Campo E-mail de Acesso -->
+            <div class="form-group">
+              <label for="doctor-email">E-mail de Acesso</label>
+              <input 
+                type="email" 
+                id="doctor-email" 
+                name="doctor-email" 
+                placeholder="jose.silva@inovare.com.br" 
+                required 
+                aria-required="true"
+              >
+            </div>
+
+            <!-- Campo Especialidade -->
+            <div class="form-group">
+              <label for="doctor-specialty">Especialidade Médica</label>
+              <select id="doctor-specialty" name="doctor-specialty" required aria-required="true">
+                <option value="">Selecione uma especialidade...</option>
+                <!-- Preenchido via JavaScript -->
+              </select>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="form-group">
+              <label for="doctor-password">Senha de Acesso</label>
+              <input 
+                type="password" 
+                id="doctor-password" 
+                name="doctor-password" 
+                placeholder="Senha de acesso inicial" 
+                required 
+                aria-required="true"
+              >
+            </div>
+
+            <!-- Botões de Ação -->
+            <button type="submit" id="btn-save-doctor">
+              Salvar Médico
+            </button>
+            
+            <button type="button" id="btn-cancel-edit" class="btn-cancel-edit" style="display: none;">
+              Cancelar Edição
+            </button>
+          </fieldset>
+        </form>
       </div>
-    </div>
+    </section>
+
+    <!-- Seção de Listagem de Médicos -->
+    <section class="appointments-section" aria-labelledby="list-section-title" style="margin-top: 30px;">
+      <h2 id="list-section-title">Médicos Ativos</h2>
+      <div id="doctors-list" class="appointments-list">
+        <!-- Cards de médicos gerados dinamicamente via JS -->
+        <p class="empty-message">Carregando médicos ativos...</p>
+      </div>
+    </section>
+
   </main>
 
-  <script type="module">
-    // Carregar dados dinâmicos do usuário
-    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-    if (usuario) {
-      document.getElementById('user-name').textContent = usuario.nome;
-      document.getElementById('display-name').textContent = usuario.nome;
-      document.getElementById('display-email').textContent = usuario.email;
-    }
+  <!-- Rodapé Padronizado -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="container">
+      <p>R. Carlos Osternack, 111 - Estrela, Ponta Grossa - PR, 84040-120 | Telefone: (42) 3026-2600</p>
+    </div>
+  </footer>
 
-    // Funcionalidade de Logout
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      sessionStorage.removeItem('usuarioLogado');
-      window.location.href = 'index.html';
-    });
-  </script>
+  <!-- Script do Painel Administrativo -->
+  <script type="module" src="js/admin.js"></script>
 </body>
 </html>
