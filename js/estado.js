@@ -30,7 +30,7 @@ class Estado {
           senha: "123"
         },
         {
-          email: "lilian.pilatti@inovare.com.br",
+          email: "liliana.pilatti@inovare.com.br",
           nome: "Dra. Liliana Elias Pena Pilatti",
           perfil: "medico",
           especialidade: "Cardiologia",
@@ -45,7 +45,7 @@ class Estado {
         },
         {
           email: "paciente@gmail.com",
-          nome: "Gabriel Hass",
+          nome: "Victor Hass",
           perfil: "paciente",
           senha: "123"
         }
