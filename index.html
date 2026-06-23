@@ -3,69 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Inovare Serviços de Saúde - Atendimento médico humanizado, especializado e de alta tecnologia. Agende sua consulta online de forma rápida e segura.">
+  <meta name="description" content="Inovare Serviços de Saúde - Atendimento médico humanizado e especializado em Ponta Grossa. Faça login para acessar o sistema.">
   <title>Inovare Serviços de Saúde | Início</title>
-  
-  <!-- CSS Link -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Header Institucional -->
+  <!-- Cabeçalho com Logo Oficial -->
   <header class="main-header" role="banner">
     <div class="header-container">
-      <div class="logo" id="main-logo">
-        <div class="logo-icon">I</div>
-        <span>Inovare</span> Saúde
-      </div>
+      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img">
     </div>
   </header>
 
   <!-- Conteúdo Principal -->
   <main class="container" id="main-content">
     
-    <!-- Hero / Breve descrição -->
+    <!-- Apresentação Curta -->
     <section class="hero" aria-labelledby="hero-title">
-      <h1 id="hero-title">Cuidado humanizado e tecnologia a favor da sua saúde</h1>
-      <p>Na Inovare, oferecemos um atendimento completo, com profissionais qualificados e dedicados ao seu bem-estar e de sua família.</p>
+      <h1 id="hero-title">Inovare Serviços de Saúde</h1>
+      <p>Cuidado de excelência e atendimento médico humanizado para você e sua família.</p>
     </section>
 
-    <!-- Seção de Especialidades -->
+    <!-- Lista de Especialidades -->
     <section class="specialties" aria-labelledby="specialties-title">
-      <h2 id="specialties-title">Nossas Especialidades</h2>
+      <h2 id="specialties-title">Nossas Principais Especialidades</h2>
       <div class="grid-cards">
         
         <article class="card">
-          <div class="card-icon" aria-hidden="true">❤️</div>
           <h3>Cardiologia</h3>
-          <p>Prevenção, diagnóstico e tratamento de doenças do coração. Cuidado especializado para o seu sistema circulatório.</p>
+          <p>Exames, diagnósticos clínicos e prevenção de doenças cardíacas.</p>
         </article>
 
         <article class="card">
-          <div class="card-icon" aria-hidden="true">👶</div>
-          <h3>Pediatria</h3>
-          <p>Atendimento dedicado à saúde infantil, acompanhamento de desenvolvimento e cuidados gerais na infância.</p>
+          <h3>Dermatologia</h3>
+          <p>Cuidados e procedimentos especializados para a saúde da sua pele.</p>
         </article>
 
         <article class="card">
-          <div class="card-icon" aria-hidden="true">🩺</div>
-          <h3>Clínica Geral</h3>
-          <p>Avaliação médica completa, tratamentos integrados, diagnósticos iniciais e encaminhamentos preventivos.</p>
+          <h3>Ortopedia</h3>
+          <p>Tratamento clínico e cirúrgico para distúrbios osteomusculares.</p>
         </article>
         
       </div>
     </section>
 
-    <!-- Formulário de Login -->
+    <!-- Seção do Formulário de Login -->
     <section class="login-section" aria-labelledby="login-title">
       <div class="form-wrapper">
         <div class="form-title">
-          <h2 id="login-title">Acesse sua Conta</h2>
-          <p>Entre com seus dados para agendar e gerenciar consultas</p>
+          <h2 id="login-title">Acesso ao Portal</h2>
+          <p>Digite suas credenciais cadastrais para acessar o painel</p>
         </div>
-
-        <!-- Mensagem de feedback (Sucesso / Erro) -->
-        <div id="feedback-msg" class="feedback-message" role="alert" aria-live="polite"></div>
 
         <form id="login-form" novalidate>
           <fieldset>
@@ -73,40 +62,39 @@
 
             <!-- Campo E-mail -->
             <div class="form-group">
-              <label for="email">Endereço de E-mail</label>
-              <div class="input-wrapper">
-                <input 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  placeholder="exemplo@inovare.com.br" 
-                  required 
-                  aria-required="true"
-                >
-              </div>
+              <label for="email">E-mail</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                placeholder="exemplo@inovare.com.br" 
+                required 
+                aria-required="true"
+              >
             </div>
 
             <!-- Campo Senha -->
             <div class="form-group">
-              <label for="password">Senha de Acesso</label>
-              <div class="input-wrapper">
-                <input 
-                  type="password" 
-                  id="password" 
-                  name="password" 
-                  placeholder="Sua senha de 3 ou mais dígitos" 
-                  required 
-                  aria-required="true"
-                >
-              </div>
+              <label for="password">Senha</label>
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                placeholder="Sua senha de acesso" 
+                required 
+                aria-required="true"
+              >
             </div>
 
             <!-- Botão de Enviar -->
-            <button type="submit" class="btn btn-primary" id="btn-login-submit">
-              Entrar na Plataforma
+            <button type="submit" id="btn-login-submit">
+              Entrar
             </button>
           </fieldset>
         </form>
+
+        <!-- Mensagem de erro em vermelho inline colocada abaixo do formulário -->
+        <div id="error-message" class="error-message" role="alert" aria-live="polite"></div>
       </div>
     </section>
 
@@ -115,8 +103,7 @@
   <!-- Rodapé -->
   <footer class="main-footer" role="contentinfo">
     <div class="container">
-      <p>&copy; 2026 Inovare Serviços de Saúde. Todos os direitos reservados.</p>
-      <p>Avenida da Saúde, 1000 - Centro | Telefone: (11) 4002-8922</p>
+      <p>R. Carlos Osternack, 111 - Estrela, Ponta Grossa - PR, 84040-120 | Telefone: (42) 3026-2600</p>
     </div>
   </footer>
 

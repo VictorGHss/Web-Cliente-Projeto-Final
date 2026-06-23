@@ -5,52 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Administrador | Inovare</title>
   <link rel="stylesheet" href="css/style.css">
+  <script type="module">
+    // Proteção de rota imediata no head para evitar FOUC
+    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    if (!usuario || usuario.perfil !== 'admin') {
+      window.location.href = 'index.html';
+    }
+  </script>
 </head>
 <body>
 
   <header class="main-header">
     <div class="header-container">
-      <div class="logo">
-        <div class="logo-icon">I</div>
-        <span>Inovare</span> Saúde
-      </div>
-      <span class="user-badge">Área Administrativa</span>
+      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px;">
     </div>
   </header>
 
   <main class="container">
     <div class="dashboard-container">
       <div class="dashboard-header">
-        <h2>Bem-vindo, <span id="user-name">Administrador</span>!</h2>
-        <button id="btn-logout" class="btn btn-secondary" style="width: auto; padding: 8px 16px;">Sair</button>
+        <h2>Olá, <span id="user-name">Administrador</span>!</h2>
+        <button id="btn-logout" class="btn-logout">Sair</button>
       </div>
 
-      <div class="card" style="border-color: var(--color-secondary);">
-        <h3>Estatísticas Rápidas do Sistema</h3>
-        <p><strong>E-mail:</strong> <span id="user-email">admin@inovare.com.br</span></p>
-        <p><strong>Perfil:</strong> Administrador do Sistema</p>
-      </div>
-
-      <div class="card" style="margin-top: 24px; border-style: dashed; text-align: center;">
-        <div class="card-icon" style="margin: 0 auto 12px auto;">⚙️</div>
-        <h3>Configuração e Cadastros</h3>
-        <p>Gerenciamento de médicos, pacientes e relatórios operacionais.</p>
-        <button class="btn btn-primary" style="margin-top: 16px; width: auto;" disabled>Gerenciar Usuários (Em Breve)</button>
+      <div class="card">
+        <h3>Painel Administrativo Geral</h3>
+        <p><strong>Nome:</strong> <span id="display-name">Carregando...</span></p>
+        <p><strong>E-mail:</strong> <span id="display-email">Carregando...</span></p>
       </div>
     </div>
   </main>
 
   <script type="module">
-    // Proteção de Rota
+    // Carregar dados dinâmicos do usuário
     const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-    if (!usuario || usuario.perfil !== 'admin') {
-      window.location.href = 'index.html';
-    } else {
+    if (usuario) {
       document.getElementById('user-name').textContent = usuario.nome;
-      document.getElementById('user-email').textContent = usuario.email;
+      document.getElementById('display-name').textContent = usuario.nome;
+      document.getElementById('display-email').textContent = usuario.email;
     }
 
-    // Logout
+    // Funcionalidade de Logout
     document.getElementById('btn-logout').addEventListener('click', () => {
       sessionStorage.removeItem('usuarioLogado');
       window.location.href = 'index.html';

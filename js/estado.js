@@ -1,51 +1,53 @@
 /**
  * Módulo de Estado da Inovare Serviços de Saúde
- * Gerencia o localStorage utilizando padrões ES6 e encapsulamento privado.
+ * Gerencia o localStorage utilizando uma Classe ES6 com atributos privados (#).
  */
 class Estado {
-  // Propriedades privadas para encapsular os dados do sistema
+  // Atributos privados encapsulando os dados
   #usuarios = [];
   #consultas = [];
+  #especialidades = {};
 
   constructor() {
     this.#inicializar();
   }
 
   /**
-   * Inicializa o estado buscando do localStorage ou preenchendo com dados padrão.
+   * Inicializa o estado buscando do localStorage ou preenchendo com dados padrão da Inovare.
    */
   #inicializar() {
     const usuariosSalvos = localStorage.getItem('inovare_usuarios');
     const consultasSalvas = localStorage.getItem('inovare_consultas');
+    const especialidadesSalvas = localStorage.getItem('inovare_especialidades');
 
-    // Inicialização de Usuários
+    // Inicializa os Usuários Padrão se vazio
     if (!usuariosSalvos) {
       const usuariosIniciais = [
         {
-          email: 'admin@inovare.com.br',
-          senha: '123',
-          perfil: 'admin',
-          nome: 'Administrador Geral'
+          email: "admin@inovare.com.br",
+          nome: "Admin Inovare",
+          perfil: "admin",
+          senha: "123"
         },
         {
-          email: 'arnaldo@inovare.com.br',
-          senha: '123',
-          perfil: 'medico',
-          nome: 'Dr. Arnaldo Souza',
-          especialidade: 'Cardiologia'
+          email: "lilian.pilatti@inovare.com.br",
+          nome: "Dra. Liliana Elias Pena Pilatti",
+          perfil: "medico",
+          especialidade: "Cardiologia",
+          senha: "123"
         },
         {
-          email: 'clara@inovare.com.br',
-          senha: '123',
-          perfil: 'medico',
-          nome: 'Dra. Clara Mendes',
-          especialidade: 'Pediatria'
+          email: "giuliano.campanari@inovare.com.br",
+          nome: "Dr. Giuliano Schultz Doretto Campanari",
+          perfil: "medico",
+          especialidade: "Dermatologia",
+          senha: "123"
         },
         {
-          email: 'paciente@gmail.com',
-          senha: '123',
-          perfil: 'paciente',
-          nome: 'Paciente de Teste'
+          email: "paciente@gmail.com",
+          nome: "Gabriel Hass",
+          perfil: "paciente",
+          senha: "123"
         }
       ];
       this.#usuarios = usuariosIniciais;
@@ -53,69 +55,143 @@ class Estado {
     } else {
       try {
         this.#usuarios = JSON.parse(usuariosSalvos);
-      } catch (error) {
-        console.error('Falha ao parsear usuários do localStorage:', error);
+      } catch (e) {
+        console.error("Erro ao ler usuários do localStorage", e);
         this.#usuarios = [];
       }
     }
 
-    // Inicialização de Consultas
+    // Inicializa a Lista de Consultas se vazio
     if (!consultasSalvas) {
-      const consultasIniciais = [];
-      this.#consultas = consultasIniciais;
-      this.salvarConsultas(consultasIniciais);
+      this.#consultas = [];
+      this.salvarConsultas([]);
     } else {
       try {
         this.#consultas = JSON.parse(consultasSalvas);
-      } catch (error) {
-        console.error('Falha ao parsear consultas do localStorage:', error);
+      } catch (e) {
+        console.error("Erro ao ler consultas do localStorage", e);
         this.#consultas = [];
+      }
+    }
+
+    // Inicializa o Mapa Completo de Especialidades
+    if (!especialidadesSalvas) {
+      const especialidadesIniciais = {
+        "Alergia e Imunologia": ["Dra. Vania Gulin"],
+        "Cardiologia": [
+          "Dra. Liliana Elias Pena Pilatti",
+          "Dr. Marcelo Valladão Ferreira",
+          "Dr. Rubens Sirtoli Filho"
+        ],
+        "Cirurgia do Aparelho Digestivo": [
+          "Dr. Cesar Toshio Oda",
+          "Dr. Joelson José Gulin"
+        ],
+        "Cirurgia Geral": ["Dr. Daniel Oda"],
+        "Cirurgia Plástica": ["Dr. Victor Mauro"],
+        "Cirurgia Torácica": ["Dr. Magno Zanellato"],
+        "Cirurgia Vascular": [
+          "Dr. Bruno Figueiredo Pançan",
+          "Dra. Karen Kono Miyabukuro",
+          "Dr. Ricardo Zanetti Gomes"
+        ],
+        "Clínica Geral": [
+          "Dra. Ana Paula Costa Pádua de Carvalho",
+          "Dr. Luiz Henrique Strack"
+        ],
+        "Dermatologia": ["Dr. Giuliano Schultz Doretto Campanari"],
+        "Endocrinologia": ["Dr. Alexandre Barão Acuña"],
+        "Fisioterapia": ["Dra. Juliana Borato"],
+        "Fonoaudiologia": ["Dra. Cíntia Simão Cenovicz"],
+        "Gastroenterologia": [
+          "Dra. Caroline Tatim Saad",
+          "Dr. Claudio Solak",
+          "Dr. Danilo Saad"
+        ],
+        "Ginecologia": [
+          "Dra. Brenda de Almeida Aguiar",
+          "Dr. Carlos Alberto Batista da Silva",
+          "Dr. Edson Delfrate",
+          "Dr. Eduardo Serman",
+          "Dra. Isabela Baumel Mongruel",
+          "Dra. Lisa Paula Fernandes Teixeira",
+          "Dra. Tatyellen Dalzotto"
+        ],
+        "Nefrologia": ["Dr. João Felipe Lara Bueno"],
+        "Neurologia": [
+          "Dr. Carlos Henrique Ferreira Camargo",
+          "Dr. Marcelo Tessari"
+        ],
+        "Nutrição": ["Paola Francielle Pavlak"],
+        "Nutrologia": ["Dr. Irineu Zanellato"],
+        "Odontologia": ["Dr. Roberto Kravchychyn"],
+        "Oftalmologia": [
+          "Dra. Fernanda Cenovicz",
+          "Dr. Marcelo Cenovicz",
+          "Dr. Murilo Cenovicz"
+        ],
+        "Ortopedia": [
+          "Dr. Carlos Miers",
+          "Dr. Cristiano Gatelli",
+          "Dr. Daniel Cartelli",
+          "Dr. Franklin Roberto Hilgemberg",
+          "Dr. Luis Felipe Villas Bôas",
+          "Dra. Marina Polydoro",
+          "Dr. Rafael Pançan de Biaggi",
+          "Dr. Rodrigo Caldonazzo Fávaro"
+        ],
+        "Ortopedia Pediátrica": ["Dr. Eduardo Mattos"],
+        "Pediatria": ["Dra. Fabíola Moreira Baigorria"],
+        "Pneumologia": ["Dr. Magno Zanellato"],
+        "Psicologia": ["Dra. Thais Fernanda Silvestre"],
+        "Psiquiatria": ["Dra. Kelly Melina Brito Costa"],
+        "Reumatologia": ["Dr. Marcelo Schafranski"],
+        "Urologia": [
+          "Dr. Alisson Vinicius Emerique Fucio",
+          "Dr. Carlos Heidi Koga",
+          "Dr. Eduardo Bisinella"
+        ]
+      };
+      this.#especialidades = especialidadesIniciais;
+      this.salvarEspecialidades(especialidadesIniciais);
+    } else {
+      try {
+        this.#especialidades = JSON.parse(especialidadesSalvas);
+      } catch (e) {
+        console.error("Erro ao ler especialidades do localStorage", e);
+        this.#especialidades = {};
       }
     }
   }
 
-  /**
-   * Retorna uma cópia da lista de usuários.
-   * @returns {Array} Lista de usuários cadastrados
-   */
+  // Métodos Públicos
   getUsuarios() {
-    // Retorna uma cópia rasa para manter o encapsulamento seguro
     return [...this.#usuarios];
   }
 
-  /**
-   * Salva a nova lista de usuários na memória e no localStorage.
-   * @param {Array} novosUsuarios - A nova lista de usuários a ser salva
-   */
-  salvarUsuarios(novosUsuarios) {
-    if (!Array.isArray(novosUsuarios)) {
-      throw new Error('O conjunto de usuários precisa ser uma lista.');
-    }
-    this.#usuarios = [...novosUsuarios];
+  salvarUsuarios(usuarios) {
+    this.#usuarios = [...usuarios];
     localStorage.setItem('inovare_usuarios', JSON.stringify(this.#usuarios));
   }
 
-  /**
-   * Retorna uma cópia da lista de consultas.
-   * @returns {Array} Lista de consultas do sistema
-   */
   getConsultas() {
     return [...this.#consultas];
   }
 
-  /**
-   * Salva a nova lista de consultas na memória e no localStorage.
-   * @param {Array} novasConsultas - A nova lista de consultas a ser salva
-   */
-  salvarConsultas(novasConsultas) {
-    if (!Array.isArray(novasConsultas)) {
-      throw new Error('O conjunto de consultas precisa ser uma lista.');
-    }
-    this.#consultas = [...novasConsultas];
+  salvarConsultas(consultas) {
+    this.#consultas = [...consultas];
     localStorage.setItem('inovare_consultas', JSON.stringify(this.#consultas));
+  }
+
+  getEspecialidades() {
+    return { ...this.#especialidades };
+  }
+
+  salvarEspecialidades(especialidades) {
+    this.#especialidades = { ...especialidades };
+    localStorage.setItem('inovare_especialidades', JSON.stringify(this.#especialidades));
   }
 }
 
-// Instanciação e exportação de um Singleton para garantir que o estado seja compartilhado entre os arquivos
 const estado = new Estado();
 export default estado;

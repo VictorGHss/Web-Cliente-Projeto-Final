@@ -5,54 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Painel do Médico | Inovare</title>
   <link rel="stylesheet" href="css/style.css">
+  <script type="module">
+    // Proteção de rota imediata no head para evitar FOUC
+    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    if (!usuario || usuario.perfil !== 'medico') {
+      window.location.href = 'index.html';
+    }
+  </script>
 </head>
 <body>
 
   <header class="main-header">
     <div class="header-container">
-      <div class="logo">
-        <div class="logo-icon">I</div>
-        <span>Inovare</span> Saúde
-      </div>
-      <span class="user-badge">Área Médica</span>
+      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px;">
     </div>
   </header>
 
   <main class="container">
     <div class="dashboard-container">
       <div class="dashboard-header">
-        <h2>Bem-vindo, <span id="user-name">Dr.</span>!</h2>
-        <button id="btn-logout" class="btn btn-secondary" style="width: auto; padding: 8px 16px;">Sair</button>
+        <h2>Olá, <span id="user-name">Dr(a)</span>!</h2>
+        <button id="btn-logout" class="btn-logout">Sair</button>
       </div>
 
-      <div class="card" style="border-color: var(--color-secondary);">
-        <h3>Informações Profissionais</h3>
-        <p><strong>E-mail:</strong> <span id="user-email">medico@inovare.com.br</span></p>
-        <p><strong>Especialidade:</strong> <span id="user-specialty">Especialidade</span></p>
-        <p><strong>Perfil:</strong> Médico</p>
-      </div>
-
-      <div class="card" style="margin-top: 24px; border-style: dashed; text-align: center;">
-        <div class="card-icon" style="margin: 0 auto 12px auto;">🩺</div>
-        <h3>Agenda do Dia</h3>
-        <p>Você não possui consultas agendadas para hoje.</p>
-        <button class="btn btn-primary" style="margin-top: 16px; width: auto;" disabled>Visualizar Agenda Completa (Em Breve)</button>
+      <div class="card">
+        <h3>Dados de Identificação</h3>
+        <p><strong>Nome:</strong> <span id="display-name">Carregando...</span></p>
+        <p><strong>E-mail:</strong> <span id="display-email">Carregando...</span></p>
+        <p><strong>Especialidade:</strong> <span id="display-specialty">Carregando...</span></p>
       </div>
     </div>
   </main>
 
   <script type="module">
-    // Proteção de Rota
+    // Carregar dados dinâmicos do usuário
     const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-    if (!usuario || usuario.perfil !== 'medico') {
-      window.location.href = 'index.html';
-    } else {
+    if (usuario) {
       document.getElementById('user-name').textContent = usuario.nome;
-      document.getElementById('user-email').textContent = usuario.email;
-      document.getElementById('user-specialty').textContent = usuario.especialidade;
+      document.getElementById('display-name').textContent = usuario.nome;
+      document.getElementById('display-email').textContent = usuario.email;
+      document.getElementById('display-specialty').textContent = usuario.especialidade || 'N/A';
     }
 
-    // Logout
+    // Funcionalidade de Logout
     document.getElementById('btn-logout').addEventListener('click', () => {
       sessionStorage.removeItem('usuarioLogado');
       window.location.href = 'index.html';
