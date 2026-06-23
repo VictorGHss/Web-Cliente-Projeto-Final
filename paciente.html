@@ -6,50 +6,100 @@
   <title>Painel do Paciente | Inovare</title>
   <link rel="stylesheet" href="css/style.css">
   <script type="module">
-    // Proteção de rota imediata no head para evitar FOUC (flash of unauthenticated content)
-    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-    if (!usuario || usuario.perfil !== 'paciente') {
-      window.location.href = 'index.html';
+    // Proteção de rota imediata no head em escopo isolado para evitar erros de re-declaração
+    {
+      const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+      if (!usuario || usuario.perfil !== 'paciente') {
+        window.location.href = 'index.html';
+      }
     }
   </script>
 </head>
 <body>
 
-  <header class="main-header">
-    <div class="header-container">
-      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px;">
+  <!-- Cabeçalho com Logo, Nome do Paciente e Logout -->
+  <header class="main-header" role="banner">
+    <div class="header-container" style="display: flex; align-items: center; justify-content: space-between;">
+      <img src="http://inovare.med.br/wp-content/uploads/2023/01/Logo.png" alt="Inovare Serviços de Saúde" class="logo-img" style="max-height: 40px; margin: 0;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="user-badge" id="patient-name">Carregando...</span>
+        <button id="btn-logout" class="btn-logout">Sair</button>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-    <div class="dashboard-container">
-      <div class="dashboard-header">
-        <h2>Olá, <span id="user-name">Paciente</span>!</h2>
-        <button id="btn-logout" class="btn-logout">Sair</button>
+  <!-- Conteúdo Principal -->
+  <main class="container" id="main-content">
+    
+    <!-- Seção de Consultas Marcadas -->
+    <section class="appointments-section" aria-labelledby="appointments-title">
+      <h2 id="appointments-title">Minhas Consultas</h2>
+      <div id="appointments-list" class="appointments-list">
+        <!-- Preenchido via JavaScript (cards ou aviso amigável) -->
+        <p class="empty-message">Carregando suas consultas...</p>
       </div>
+    </section>
 
-      <div class="card">
-        <h3>Dados de Login</h3>
-        <p><strong>Nome:</strong> <span id="display-name">Carregando...</span></p>
-        <p><strong>E-mail:</strong> <span id="display-email">Carregando...</span></p>
+    <!-- Seção de Novo Agendamento -->
+    <section class="login-section" aria-labelledby="schedule-title">
+      <div class="form-wrapper">
+        <div class="form-title">
+          <h2 id="schedule-title">Agendar Consulta</h2>
+          <p>Preencha os campos abaixo para marcar sua nova consulta na Inovare</p>
+        </div>
+
+        <form id="appointment-form" novalidate>
+          <fieldset>
+            <legend>Dados do Agendamento</legend>
+
+            <!-- Seleção de Especialidade -->
+            <div class="form-group">
+              <label for="select-specialty">Especialidade</label>
+              <select id="select-specialty" required>
+                <option value="">Selecione uma especialidade...</option>
+                <!-- Preenchido via JavaScript -->
+              </select>
+            </div>
+
+            <!-- Seleção de Médico (Inicia desabilitado) -->
+            <div class="form-group">
+              <label for="select-doctor">Médico(a)</label>
+              <select id="select-doctor" disabled required>
+                <option value="">Selecione uma especialidade primeiro...</option>
+              </select>
+            </div>
+
+            <!-- Seleção de Data -->
+            <div class="form-group">
+              <label for="appointment-date">Data da Consulta</label>
+              <input type="date" id="appointment-date" required>
+            </div>
+
+            <!-- Seleção de Horário -->
+            <div class="form-group">
+              <label for="appointment-time">Horário da Consulta</label>
+              <input type="time" id="appointment-time" required>
+            </div>
+
+            <!-- Botão de Agendamento -->
+            <button type="submit" id="btn-submit-appointment">
+              Confirmar Agendamento
+            </button>
+          </fieldset>
+        </form>
       </div>
-    </div>
+    </section>
+
   </main>
 
-  <script type="module">
-    // Carregar dados dinâmicos do usuário
-    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
-    if (usuario) {
-      document.getElementById('user-name').textContent = usuario.nome;
-      document.getElementById('display-name').textContent = usuario.nome;
-      document.getElementById('display-email').textContent = usuario.email;
-    }
+  <!-- Rodapé Padronizado -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="container">
+      <p>R. Carlos Osternack, 111 - Estrela, Ponta Grossa - PR, 84040-120 | Telefone: (42) 3026-2600</p>
+    </div>
+  </footer>
 
-    // Funcionalidade de Logout
-    document.getElementById('btn-logout').addEventListener('click', () => {
-      sessionStorage.removeItem('usuarioLogado');
-      window.location.href = 'index.html';
-    });
-  </script>
+  <!-- Script Principal do Painel do Paciente -->
+  <script type="module" src="js/paciente.js"></script>
 </body>
 </html>

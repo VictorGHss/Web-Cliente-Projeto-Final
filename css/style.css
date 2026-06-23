@@ -295,3 +295,99 @@ button[type="submit"]:hover {
     box-shadow: var(--shadow-lg);
   }
 }
+
+/* Consultas e Painel do Paciente */
+.appointments-section {
+  margin-bottom: 30px;
+}
+
+.appointments-section h2 {
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--secondary);
+  padding-bottom: 6px;
+}
+
+.appointments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.appointment-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background-color: var(--bg-light);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.appointment-card p {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.appointment-card strong {
+  color: #111111;
+}
+
+.badge-status {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 20px;
+  background-color: #e0f2fe;
+  color: #0369a1;
+  text-transform: uppercase;
+}
+
+.badge-status.agendado {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.btn-cancel {
+  width: 100%;
+  padding: 10px;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+  background-color: #dc2626;
+}
+
+.empty-message {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-light);
+}
+
+/* Lógica de Carregamento Assíncrono */
+.loading-select {
+  border-color: var(--primary) !important;
+  background-color: var(--secondary) !important;
+  opacity: 0.7;
+  cursor: wait !important;
+  animation: selectPulse 1s infinite alternate;
+}
+
+@keyframes selectPulse {
+  0% { opacity: 0.6; }
+  100% { opacity: 0.95; }
+}
