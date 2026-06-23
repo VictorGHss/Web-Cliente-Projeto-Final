@@ -34,29 +34,32 @@
     <section class="appointments-section" aria-labelledby="appointments-title">
       <h2 id="appointments-title">Agenda de Atendimentos</h2>
       
-      <!-- Container Responsivo da Tabela -->
-      <div id="table-wrapper" class="table-responsive" style="display: none;">
-        <table class="appointments-table" id="appointments-table">
+      <!-- Exibição em Cards para Celulares (Mobile-Only) -->
+      <div id="mobile-cards-wrapper" class="mobile-only-cards" style="display: none;">
+        <!-- Cards gerados dinamicamente via JS -->
+      </div>
+
+      <!-- Exibição em Tabela para Desktops (Desktop-Only) -->
+      <div id="desktop-table-wrapper" class="desktop-only-table" style="display: none;">
+        <table class="appointments-table">
           <thead>
             <tr>
               <th scope="col">Paciente</th>
               <th scope="col">Data</th>
               <th scope="col">Horário</th>
-              <th scope="col">Status Atual</th>
+              <th scope="col">Status</th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
           <tbody id="appointments-tbody">
-            <!-- Linhas de consultas geradas dinamicamente via JS -->
+            <!-- Linhas geradas dinamicamente via JS -->
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="5" id="appointments-total" style="text-align: right;">
-                Total de atendimentos: 0
-              </td>
-            </tr>
-          </tfoot>
         </table>
+      </div>
+
+      <!-- Totalizador de Consultas Unificado -->
+      <div id="appointments-total-container" style="display: none;">
+        Total de atendimentos: 0
       </div>
 
       <!-- Mensagem amigável alternativa caso não haja consultas -->

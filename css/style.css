@@ -543,91 +543,92 @@ button[type="submit"]:hover {
   padding: 8px;
 }
 
-@media screen and (max-width: 768px) {
-  /* Desativa a necessidade de scroll horizontal na tabela */
-  .table-responsive {
-    overflow-x: visible !important;
-  }
+/* Estilos de Exibição Dupla (Dual Display) */
+.mobile-only-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-  /* Força os elementos da tabela a se comportarem como blocos verticais */
-  #table-wrapper table,
-  #table-wrapper tbody,
-  #table-wrapper tr,
-  #table-wrapper td {
-    display: block;
-    width: 100%;
-  }
+.desktop-only-table {
+  display: none !important;
+}
 
-  /* Oculta o cabeçalho original da tabela (thead) pois os títulos ficarão inline */
-  #table-wrapper thead {
-    display: none;
+@media screen and (min-width: 768px) {
+  .mobile-only-cards {
+    display: none !important;
   }
+  .desktop-only-table {
+    display: block !important;
+  }
+}
 
-  /* Transforma cada linha (tr) da tabela em um Card separado */
-  #table-wrapper tbody tr {
-    background: #ffffff;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    margin-bottom: 16px;
-    padding: 12px 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
+/* Novo Card de Consulta do Médico (Mobile-First) */
+.appointment-doctor-card {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
 
-  /* Organiza cada célula (td) como uma linha interna do card, alinhando rótulo e valor */
-  #table-wrapper tbody td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px dashed #eee;
-    text-align: right;
-  }
+.appointment-doctor-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-lg);
+}
 
-  /* Remove a borda tracejada do último item (ações) */
-  #table-wrapper tbody td:last-child {
-    border-bottom: none;
-    flex-direction: column;
-    gap: 8px;
-    padding-top: 12px;
-    justify-content: center;
-  }
+.appointment-doctor-card p {
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #f0f0f0;
+  padding-bottom: 6px;
+}
 
-  /* Injeta automaticamente os rótulos correspondentes na esquerda de cada célula usando pseudo-elementos */
-  #table-wrapper tbody td:nth-child(1)::before {
-    content: "Paciente:";
-    font-weight: bold;
-    color: var(--text);
-  }
-  #table-wrapper tbody td:nth-child(2)::before {
-    content: "Data:";
-    font-weight: bold;
-    color: var(--text);
-  }
-  #table-wrapper tbody td:nth-child(3)::before {
-    content: "Horário:";
-    font-weight: bold;
-    color: var(--text);
-  }
-  #table-wrapper tbody td:nth-child(4)::before {
-    content: "Status:";
-    font-weight: bold;
-    color: var(--text);
-  }
+.appointment-doctor-card p:last-of-type {
+  border-bottom: none;
+}
 
-  /* Ajusta o rodapé (tfoot) para exibir o totalizador centralizado no card final */
-  #table-wrapper tfoot,
-  #table-wrapper tfoot tr,
-  #table-wrapper tfoot td {
-    display: block;
-    width: 100%;
-    text-align: center;
+.appointment-doctor-card p strong {
+  color: #111111;
+  font-family: 'Outfit', sans-serif;
+}
+
+.appointment-doctor-card .card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.appointment-doctor-card .card-actions button {
+  width: 100% !important;
+  padding: 12px;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+@media screen and (min-width: 480px) {
+  .appointment-doctor-card .card-actions {
+    flex-direction: row;
   }
-  
-  #table-wrapper tfoot td {
-    background: #fffbf7;
-    border: 1px solid var(--secondary);
-    border-radius: 8px;
-    padding: 12px;
-    font-weight: bold;
-  }
+}
+
+/* Container do Totalizador Independente */
+#appointments-total-container {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-align: right;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #111111;
 }

@@ -11,10 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Elementos da Interface
   const doctorInfoSpan = document.getElementById('doctor-info');
   const btnLogout = document.getElementById('btn-logout');
-  const tableWrapper = document.getElementById('table-wrapper');
+  
+  const mobileCardsWrapper = document.getElementById('mobile-cards-wrapper');
+  const desktopTableWrapper = document.getElementById('desktop-table-wrapper');
   const appointmentsTbody = document.getElementById('appointments-tbody');
+  const appointmentsTotalContainer = document.getElementById('appointments-total-container');
   const emptyAppointments = document.getElementById('empty-appointments');
-  const appointmentsTotalCell = document.getElementById('appointments-total');
 
   // Preencher dados dinâmicos do cabeçalho
   if (doctorInfoSpan) {
@@ -30,93 +32,155 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Renderização Dinâmica dos Atendimentos do Médico
-  function redesenharTabela() {
-    if (!appointmentsTbody) return;
+  // 3. Renderização Dinâmica (Dual Display: Cards no Mobile e Tabela no Desktop)
+  function redesenharAgenda() {
+    if (!appointmentsTbody || !mobileCardsWrapper) return;
 
+    // Limpar ambos os contêineres antes de renderizar
     appointmentsTbody.innerHTML = '';
+    mobileCardsWrapper.innerHTML = '';
+
     const todasConsultas = estado.getConsultas();
 
-    // Filtrar apenas as consultas em que o nome do médico coincida com o logado
+    // Filtrar consultas correspondentes ao médico logado
     const minhasConsultas = todasConsultas.filter(
       (c) => c.medico === usuarioLogado.nome
     );
 
-    // Se o médico não possuir consultas, oculta a tabela e mostra mensagem amigável
+    // Se o médico não tiver consultas na agenda
     if (minhasConsultas.length === 0) {
-      if (tableWrapper) tableWrapper.style.display = 'none';
+      if (mobileCardsWrapper) mobileCardsWrapper.style.display = 'none';
+      if (desktopTableWrapper) desktopTableWrapper.style.display = 'none';
+      if (appointmentsTotalContainer) appointmentsTotalContainer.style.display = 'none';
       if (emptyAppointments) emptyAppointments.style.display = 'block';
       return;
     }
 
-    // Exibe a tabela e esconde a mensagem vazia
-    if (tableWrapper) tableWrapper.style.display = 'block';
+    // Exibe os contêineres (limpando o display: none inline para as classes CSS tomarem conta da visibilidade)
+    if (mobileCardsWrapper) mobileCardsWrapper.style.display = '';
+    if (desktopTableWrapper) desktopTableWrapper.style.display = '';
+    if (appointmentsTotalContainer) appointmentsTotalContainer.style.display = 'block';
     if (emptyAppointments) emptyAppointments.style.display = 'none';
 
-    // Criação segura de cada linha da tabela
+    // Gerar elementos para ambos os modos de exibição
     minhasConsultas.forEach((consulta) => {
+      const dataFormatada = formatarData(consulta.data);
+
+      // --- MODO 1: TABELA (DESKTOP) ---
       const tr = document.createElement('tr');
 
-      // Coluna: Paciente
       const tdPaciente = document.createElement('td');
       tdPaciente.textContent = consulta.paciente;
       tr.appendChild(tdPaciente);
 
-      // Coluna: Data
       const tdData = document.createElement('td');
-      tdData.textContent = formatarData(consulta.data);
+      tdData.textContent = dataFormatada;
       tr.appendChild(tdData);
 
-      // Coluna: Horário
       const tdHora = document.createElement('td');
       tdHora.textContent = consulta.hora;
       tr.appendChild(tdHora);
 
-      // Coluna: Status Atual
-      const tdStatus = document.createElement('td');
-      const spanStatus = document.createElement('span');
-      spanStatus.className = `badge-status ${consulta.status.toLowerCase()}`;
-      spanStatus.textContent = consulta.status;
-      tdStatus.appendChild(spanStatus);
-      tr.appendChild(tdStatus);
+      const tdStatusTable = document.createElement('td');
+      const spanStatusTable = document.createElement('span');
+      spanStatusTable.className = `badge-status ${consulta.status.toLowerCase()}`;
+      spanStatusTable.textContent = consulta.status;
+      tdStatusTable.appendChild(spanStatusTable);
+      tr.appendChild(tdStatusTable);
 
-      // Coluna: Ações
-      const tdAcoes = document.createElement('td');
+      const tdAcoesTable = document.createElement('td');
       if (consulta.status === 'Agendado') {
-        // Botão de Confirmar (verde)
-        const btnConfirm = document.createElement('button');
-        btnConfirm.className = 'btn-confirm';
-        btnConfirm.textContent = 'Confirmar Atendimento';
-        btnConfirm.addEventListener('click', () => {
+        const btnConfirmTable = document.createElement('button');
+        btnConfirmTable.className = 'btn-confirm';
+        btnConfirmTable.textContent = 'Confirmar Atendimento';
+        btnConfirmTable.addEventListener('click', () => {
           alterarStatusConsulta(consulta.id, 'Confirmado');
         });
-        tdAcoes.appendChild(btnConfirm);
+        tdAcoesTable.appendChild(btnConfirmTable);
 
-        // Botão de Cancelar (vermelho)
-        const btnCancel = document.createElement('button');
-        btnCancel.className = 'btn-cancel-appt';
-        btnCancel.textContent = 'Cancelar Horário';
-        btnCancel.addEventListener('click', () => {
+        const btnCancelTable = document.createElement('button');
+        btnCancelTable.className = 'btn-cancel-appt';
+        btnCancelTable.textContent = 'Cancelar Horário';
+        btnCancelTable.addEventListener('click', () => {
           alterarStatusConsulta(consulta.id, 'Cancelado');
         });
-        tdAcoes.appendChild(btnCancel);
+        tdAcoesTable.appendChild(btnCancelTable);
       } else {
-        // Consultas já finalizadas ou canceladas
-        tdAcoes.textContent = '-';
-        tdAcoes.style.textAlign = 'center';
+        tdAcoesTable.textContent = '-';
+        tdAcoesTable.style.textAlign = 'center';
       }
-      tr.appendChild(tdAcoes);
-
+      tr.appendChild(tdAcoesTable);
       appointmentsTbody.appendChild(tr);
+
+      // --- MODO 2: CARDS VERTICAIS (MOBILE) ---
+      const card = document.createElement('article');
+      card.className = 'appointment-doctor-card';
+
+      // Nome do Paciente
+      const pPaciente = document.createElement('p');
+      const strongPaciente = document.createElement('strong');
+      strongPaciente.textContent = 'Paciente';
+      const spanPaciente = document.createElement('span');
+      spanPaciente.textContent = consulta.paciente;
+      pPaciente.appendChild(strongPaciente);
+      pPaciente.appendChild(spanPaciente);
+      card.appendChild(pPaciente);
+
+      // Data e Horário
+      const pDataHora = document.createElement('p');
+      const strongDataHora = document.createElement('strong');
+      strongDataHora.textContent = 'Data/Hora';
+      const spanDataHora = document.createElement('span');
+      spanDataHora.textContent = `${dataFormatada} às ${consulta.hora}`;
+      pDataHora.appendChild(strongDataHora);
+      pDataHora.appendChild(spanDataHora);
+      card.appendChild(pDataHora);
+
+      // Status
+      const pStatusCard = document.createElement('p');
+      const strongStatusCard = document.createElement('strong');
+      strongStatusCard.textContent = 'Status';
+      const spanStatusCard = document.createElement('span');
+      spanStatusCard.className = `badge-status ${consulta.status.toLowerCase()}`;
+      spanStatusCard.textContent = consulta.status;
+      pStatusCard.appendChild(strongStatusCard);
+      pStatusCard.appendChild(spanStatusCard);
+      card.appendChild(pStatusCard);
+
+      // Ações no Card
+      if (consulta.status === 'Agendado') {
+        const divAcoesCard = document.createElement('div');
+        divAcoesCard.className = 'card-actions';
+
+        const btnConfirmCard = document.createElement('button');
+        btnConfirmCard.className = 'btn-confirm';
+        btnConfirmCard.textContent = 'Confirmar Atendimento';
+        btnConfirmCard.addEventListener('click', () => {
+          alterarStatusConsulta(consulta.id, 'Confirmado');
+        });
+        divAcoesCard.appendChild(btnConfirmCard);
+
+        const btnCancelCard = document.createElement('button');
+        btnCancelCard.className = 'btn-cancel-appt';
+        btnCancelCard.textContent = 'Cancelar Horário';
+        btnCancelCard.addEventListener('click', () => {
+          alterarStatusConsulta(consulta.id, 'Cancelado');
+        });
+        divAcoesCard.appendChild(btnCancelCard);
+
+        card.appendChild(divAcoesCard);
+      }
+
+      mobileCardsWrapper.appendChild(card);
     });
 
-    // 4. Rodapé dinâmico da tabela (Cálculo do total de atendimentos)
-    if (appointmentsTotalCell) {
-      appointmentsTotalCell.textContent = `Total de atendimentos: ${minhasConsultas.length}`;
+    // 4. Atualizar Totalizador Geral
+    if (appointmentsTotalContainer) {
+      appointmentsTotalContainer.textContent = `Total de atendimentos: ${minhasConsultas.length}`;
     }
   }
 
-  // Função auxiliar para formatação de data de YYYY-MM-DD para DD/MM/YYYY
+  // Função auxiliar para formatar data de YYYY-MM-DD para DD/MM/YYYY
   function formatarData(dataString) {
     const partes = dataString.split('-');
     if (partes.length === 3) {
@@ -125,17 +189,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return dataString;
   }
 
-  // 5. Atualização de Status da Consulta (CRUD - Update)
+  // 5. Alteração de Status no CRUD (Update)
   function alterarStatusConsulta(id, novoStatus) {
     const todasConsultas = estado.getConsultas();
     const index = todasConsultas.findIndex((c) => c.id === id);
     if (index !== -1) {
       todasConsultas[index].status = novoStatus;
       estado.salvarConsultas(todasConsultas);
-      redesenharTabela(); // Redesenha a tabela com os novos status e ações ocultas
+      redesenharAgenda(); // Recarrega ambas as visões com os novos status salvos
     }
   }
 
-  // Redesenhar a tabela na primeira inicialização
-  redesenharTabela();
+  // Carregar dados iniciais
+  redesenharAgenda();
 });
