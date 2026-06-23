@@ -1,4 +1,5 @@
 import estado from './estado.js';
+import GerenciadorMedicos from './gerenciador-medicos.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Proteção de Rota Interna e Validação de Sessão Administrativa
@@ -7,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'index.html';
     return;
   }
+
+  // Instanciar gerenciador de dados médicos
+  const gerenciadorMedicos = new GerenciadorMedicos();
 
   // 2. Elementos da Interface
   const adminDisplayName = document.getElementById('admin-display-name');
@@ -35,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. População do select de Especialidades
-  const especialidadesMap = estado.getEspecialidades();
+  // 3. População do select de Especialidades a partir do Gerenciador de Médicos
+  const especialidadesMap = gerenciadorMedicos.getEspecialidades();
   const listaEspecialidades = Object.keys(especialidadesMap).sort();
 
   listaEspecialidades.forEach((esp) => {
@@ -194,8 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
           perfil: 'medico'
         };
 
+        // 1. Salvar o login de usuário geral no estado
         todosUsuarios.push(novoMedico);
         estado.salvarUsuarios(todosUsuarios);
+
+        // 2. Inserir o médico na sua respectiva especialidade no mapa local
+        gerenciadorMedicos.adicionarMedicoAIEspecialidade(especialidade, nome);
         
         doctorForm.reset();
       } else {
@@ -205,10 +213,14 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
         if (index !== -1) {
+          // Atualiza dados no localStorage de usuários
           todosUsuarios[index].nome = nome;
           todosUsuarios[index].especialidade = especialidade;
           todosUsuarios[index].senha = senha;
           estado.salvarUsuarios(todosUsuarios);
+
+          // Também atualiza o mapa de especialidades adicionando o novo nome se tiver alterado
+          gerenciadorMedicos.adicionarMedicoAIEspecialidade(especialidade, nome);
         }
 
         cancelarEdicao();

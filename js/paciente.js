@@ -1,4 +1,5 @@
 import estado from './estado.js';
+import GerenciadorMedicos from './gerenciador-medicos.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Proteção de Rota Interna e validação de sessão
@@ -7,6 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = 'index.html';
     return;
   }
+
+  // Instanciar gerenciador de dados médicos
+  const gerenciadorMedicos = new GerenciadorMedicos();
 
   // 2. Elementos da Interface
   const patientNameSpan = document.getElementById('patient-name');
@@ -31,8 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Preencher o select de Especialidades dinamicamente
-  const especialidadesMap = estado.getEspecialidades();
+  // 3. Preencher o select de Especialidades dinamicamente a partir do Gerenciador de Médicos
+  const especialidadesMap = gerenciadorMedicos.getEspecialidades();
   const listaEspecialidades = Object.keys(especialidadesMap).sort();
 
   listaEspecialidades.forEach((esp) => {
@@ -63,9 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Limpa e popula com os médicos correspondentes
+      // Limpa e popula com os médicos correspondentes usando o novo gerenciador
       selectDoctor.innerHTML = '<option value="">Selecione o(a) médico(a)...</option>';
-      const medicos = especialidadesMap[especialidadeSelecionada] || [];
+      const medicos = gerenciadorMedicos.getMedicosPorEspecialidade(especialidadeSelecionada);
 
       medicos.forEach((medico) => {
         const option = document.createElement('option');
@@ -179,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
       todasConsultas.push(novaConsulta);
       estado.salvarConsultas(todasConsultas);
 
-      // Limpar o formulário e resetar select de médicos
+      // Limpar o formulário e resetar seletor de médicos
       appointmentForm.reset();
       selectDoctor.innerHTML = '<option value="">Selecione uma especialidade primeiro...</option>';
       selectDoctor.disabled = true;
