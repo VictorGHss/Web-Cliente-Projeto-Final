@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel do Paciente | Inovare</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="main-header">
+    <div class="header-container">
+      <div class="logo">
+        <div class="logo-icon">I</div>
+        <span>Inovare</span> Saúde
+      </div>
+      <span class="user-badge">Área do Paciente</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <h2>Bem-vindo, <span id="user-name">Paciente</span>!</h2>
+        <button id="btn-logout" class="btn btn-secondary" style="width: auto; padding: 8px 16px;">Sair</button>
+      </div>
+
+      <div class="card" style="border-color: var(--color-secondary);">
+        <h3>Seus Dados Cadastrados</h3>
+        <p><strong>E-mail:</strong> <span id="user-email">paciente@gmail.com</span></p>
+        <p><strong>Perfil:</strong> Paciente</p>
+      </div>
+
+      <div class="card" style="margin-top: 24px; border-style: dashed; text-align: center;">
+        <div class="card-icon" style="margin: 0 auto 12px auto;">📅</div>
+        <h3>Suas Consultas</h3>
+        <p>Nenhuma consulta agendada no momento.</p>
+        <button class="btn btn-primary" style="margin-top: 16px; width: auto;" disabled>Agendar Nova Consulta (Em Breve)</button>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    // Proteção de Rota
+    const usuario = JSON.parse(sessionStorage.getItem('usuarioLogado'));
+    if (!usuario || usuario.perfil !== 'paciente') {
+      window.location.href = 'index.html';
+    } else {
+      document.getElementById('user-name').textContent = usuario.nome;
+      document.getElementById('user-email').textContent = usuario.email;
+    }
+
+    // Logout
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      sessionStorage.removeItem('usuarioLogado');
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

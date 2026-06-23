@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inovare Serviços de Saúde - Atendimento médico humanizado, especializado e de alta tecnologia. Agende sua consulta online de forma rápida e segura.">
+  <title>Inovare Serviços de Saúde | Início</title>
+  
+  <!-- CSS Link -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Header Institucional -->
+  <header class="main-header" role="banner">
+    <div class="header-container">
+      <div class="logo" id="main-logo">
+        <div class="logo-icon">I</div>
+        <span>Inovare</span> Saúde
+      </div>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="container" id="main-content">
+    
+    <!-- Hero / Breve descrição -->
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Cuidado humanizado e tecnologia a favor da sua saúde</h1>
+      <p>Na Inovare, oferecemos um atendimento completo, com profissionais qualificados e dedicados ao seu bem-estar e de sua família.</p>
+    </section>
+
+    <!-- Seção de Especialidades -->
+    <section class="specialties" aria-labelledby="specialties-title">
+      <h2 id="specialties-title">Nossas Especialidades</h2>
+      <div class="grid-cards">
+        
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">❤️</div>
+          <h3>Cardiologia</h3>
+          <p>Prevenção, diagnóstico e tratamento de doenças do coração. Cuidado especializado para o seu sistema circulatório.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">👶</div>
+          <h3>Pediatria</h3>
+          <p>Atendimento dedicado à saúde infantil, acompanhamento de desenvolvimento e cuidados gerais na infância.</p>
+        </article>
+
+        <article class="card">
+          <div class="card-icon" aria-hidden="true">🩺</div>
+          <h3>Clínica Geral</h3>
+          <p>Avaliação médica completa, tratamentos integrados, diagnósticos iniciais e encaminhamentos preventivos.</p>
+        </article>
+        
+      </div>
+    </section>
+
+    <!-- Formulário de Login -->
+    <section class="login-section" aria-labelledby="login-title">
+      <div class="form-wrapper">
+        <div class="form-title">
+          <h2 id="login-title">Acesse sua Conta</h2>
+          <p>Entre com seus dados para agendar e gerenciar consultas</p>
+        </div>
+
+        <!-- Mensagem de feedback (Sucesso / Erro) -->
+        <div id="feedback-msg" class="feedback-message" role="alert" aria-live="polite"></div>
+
+        <form id="login-form" novalidate>
+          <fieldset>
+            <legend>Identificação do Usuário</legend>
+
+            <!-- Campo E-mail -->
+            <div class="form-group">
+              <label for="email">Endereço de E-mail</label>
+              <div class="input-wrapper">
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  placeholder="exemplo@inovare.com.br" 
+                  required 
+                  aria-required="true"
+                >
+              </div>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="form-group">
+              <label for="password">Senha de Acesso</label>
+              <div class="input-wrapper">
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  placeholder="Sua senha de 3 ou mais dígitos" 
+                  required 
+                  aria-required="true"
+                >
+              </div>
+            </div>
+
+            <!-- Botão de Enviar -->
+            <button type="submit" class="btn btn-primary" id="btn-login-submit">
+              Entrar na Plataforma
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="main-footer" role="contentinfo">
+    <div class="container">
+      <p>&copy; 2026 Inovare Serviços de Saúde. Todos os direitos reservados.</p>
+      <p>Avenida da Saúde, 1000 - Centro | Telefone: (11) 4002-8922</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
