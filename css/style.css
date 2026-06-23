@@ -542,3 +542,92 @@ button[type="submit"]:hover {
   text-align: center;
   padding: 8px;
 }
+
+@media screen and (max-width: 768px) {
+  /* Desativa a necessidade de scroll horizontal na tabela */
+  .table-responsive {
+    overflow-x: visible !important;
+  }
+
+  /* Força os elementos da tabela a se comportarem como blocos verticais */
+  #table-wrapper table,
+  #table-wrapper tbody,
+  #table-wrapper tr,
+  #table-wrapper td {
+    display: block;
+    width: 100%;
+  }
+
+  /* Oculta o cabeçalho original da tabela (thead) pois os títulos ficarão inline */
+  #table-wrapper thead {
+    display: none;
+  }
+
+  /* Transforma cada linha (tr) da tabela em um Card separado */
+  #table-wrapper tbody tr {
+    background: #ffffff;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Organiza cada célula (td) como uma linha interna do card, alinhando rótulo e valor */
+  #table-wrapper tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+    text-align: right;
+  }
+
+  /* Remove a borda tracejada do último item (ações) */
+  #table-wrapper tbody td:last-child {
+    border-bottom: none;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+    justify-content: center;
+  }
+
+  /* Injeta automaticamente os rótulos correspondentes na esquerda de cada célula usando pseudo-elementos */
+  #table-wrapper tbody td:nth-child(1)::before {
+    content: "Paciente:";
+    font-weight: bold;
+    color: var(--text);
+  }
+  #table-wrapper tbody td:nth-child(2)::before {
+    content: "Data:";
+    font-weight: bold;
+    color: var(--text);
+  }
+  #table-wrapper tbody td:nth-child(3)::before {
+    content: "Horário:";
+    font-weight: bold;
+    color: var(--text);
+  }
+  #table-wrapper tbody td:nth-child(4)::before {
+    content: "Status:";
+    font-weight: bold;
+    color: var(--text);
+  }
+
+  /* Ajusta o rodapé (tfoot) para exibir o totalizador centralizado no card final */
+  #table-wrapper tfoot,
+  #table-wrapper tfoot tr,
+  #table-wrapper tfoot td {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+  
+  #table-wrapper tfoot td {
+    background: #fffbf7;
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: bold;
+  }
+}
